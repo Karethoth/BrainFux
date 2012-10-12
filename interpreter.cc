@@ -34,10 +34,9 @@ bool Interpreter::HandleFile( string path )
 
   string stripped = Strip( content );
 
-  Segment rootSegment;
+  Segment rootSegment( NULL );
   rootSegment.Init( stripped, false );
 
-  rootSegment.Print( 0 );
   rootSegment.Run( &memPoint );
 
   return true;

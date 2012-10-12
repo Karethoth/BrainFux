@@ -7,6 +7,15 @@ using std::string;
 using std::vector;
 
 
+
+Segment::Segment( Segment *parent )
+{
+  parent = parent;
+  id = NewSegmentId();
+  cout << "id: " << id << "\n";
+}
+
+
 bool Segment::Init( string data, bool isLoop )
 {
   loop = isLoop;
@@ -28,8 +37,8 @@ bool Segment::Construct( string data )
     {
       segmentSize = FindLoopEnd( dataLeft );
 
-      Segment newSegment;
-      newSegment.Init( dataLeft.substr( 1, segmentSize-1 ), true );
+      Segment *newSegment = new Segment( this );
+      newSegment->Init( dataLeft.substr( 1, segmentSize-1 ), true );
 
       children.push_back( newSegment );
       segmentSize += 1;
@@ -60,17 +69,26 @@ bool Segment::Construct( string data )
           }
           else
           {
-            commands.push_back( cmd );
+            sCommand *newCmd = new sCommand();
+            newCmd->type = cmd.type;
+            newCmd->count = cmd.count;
+
+            commands.push_back( newCmd );
             cmd = tmp;
           }
         }
-        commands.push_back( cmd );
+
+        sCommand *newCmd = new sCommand();
+        newCmd->type = cmd.type;
+        newCmd->count = cmd.count;
+
+        commands.push_back( newCmd );
         break;
       }
       else
       {
-        Segment newSegment;
-        newSegment.Init( dataLeft.substr( 0, segmentSize ), false );
+        Segment *newSegment = new Segment( this );
+        newSegment->Init( dataLeft.substr( 0, segmentSize ), false );
 
         children.push_back( newSegment );
       }
@@ -105,26 +123,26 @@ void Segment::Print( int ident )
 
   if( HasChildren() )
   {
-    vector<Segment>::iterator it;
+    vector<Segment*>::iterator it;
     if( loop )
       ++ident;
     for( it = children.begin(); it != children.end(); ++it )
     {
-      (*it).Print( ident );
+      (*it)->Print( ident );
     }
     if( loop )
       --ident;
   }
   else
   {
-    vector<sCommand>::iterator it;
+    vector<sCommand*>::iterator it;
     for( int i=0; i<ident; ++i )
       cout << "  ";
     if( loop )
       cout << "  ";
     for( it = commands.begin(); it != commands.end(); ++it )
     {
-      cout << (*it).type << "(" << (*it).count << ")";
+      cout << (*it)->type << "(" << (*it)->count << ")";
     }
   }
 
@@ -159,6 +177,7 @@ bool Segment::Run( unsigned char **p )
 
 
 
+inline
 size_t Segment::CalculateNextSegmentSize( string data )
 {
   size_t loopStart = data.find( '[' );
@@ -170,6 +189,7 @@ size_t Segment::CalculateNextSegmentSize( string data )
 
 
 
+inline
 size_t Segment::FindLoopEnd( string data )
 {
   unsigned counter = 0;
@@ -191,43 +211,43 @@ size_t Segment::FindLoopEnd( string data )
 
 
 
+inline
 bool Segment::Exec( unsigned char **p )
 {
   if( HasChildren() )
   {
-    vector<Segment>::iterator it;
+    vector<Segment*>::iterator it;
     for( it = children.begin(); it != children.end(); ++it )
     {
-      (*it).Run( p );
+      (*it)->Run( p );
     }
   }
   else
   {
-    vector<sCommand>::iterator it;
+    vector<sCommand*>::iterator it;
   
     for( it = commands.begin(); it != commands.end(); ++it )
     {
-      switch( (*it).type )
+      switch( (*it)->type )
       {
         case ADD:
-          *p += (*it).count;
+          *p += (*it)->count;
           break;
 
         case SUB:
-          *p -= (*it).count;
+          *p -= (*it)->count;
           break;
 
         case INC:
-          **p += (*it).count;
+          **p += (*it)->count;
           break;
 
         case DEC:
-          **p -= (*it).count;
+          **p -= (*it)->count;
           break;
 
         case PRINT:
-          printf( "%c", **p );
-          fflush( stdin );
+          cout << string( (*it)->count, **p );
           break;
 
         case READ:

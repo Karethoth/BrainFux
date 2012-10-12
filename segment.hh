@@ -5,21 +5,32 @@
 #include <vector>
 #include "command.hh"
 
+static unsigned int segmentIdCounter=0;
+static unsigned int NewSegmentId()
+{
+  return segmentIdCounter++;
+}
 
 class Segment
 {
  private:
-  std::vector<Segment>  children;
-  std::vector<sCommand> commands;
+  unsigned int id;
   bool loop;
 
+  std::vector<Segment*>  children;
+  std::vector<sCommand*> commands;
+
  protected:
+  Segment *parent;
+
   bool Construct( std::string data );
   size_t CalculateNextSegmentSize( std::string data );
   size_t FindLoopEnd( std::string data );
   bool Exec( unsigned char **p );
 
  public:
+  Segment( Segment *parent );
+
   bool Init( std::string data, bool isLoop );
 
   bool HasChildren();
