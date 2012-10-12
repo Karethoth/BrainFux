@@ -1,10 +1,23 @@
 #include "command.hh"
 
+sCommand::sCommand()
+{
+  count = 0;
+  type  = NOT_DEFINED;
+}
+
+
 
 sCommand::sCommand( char cmd )
 {
   count = 1;
+  Set( cmd );
+}
 
+
+
+void sCommand::Set( char cmd )
+{
   switch( cmd )
   {
     case '>': type = ADD;   break;

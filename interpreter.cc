@@ -10,6 +10,11 @@ using std::cout;
 
 Interpreter::Interpreter()
 {
+  memPoint = &mem[0];
+  for( int i=0; i < IPMEM; ++i )
+  {
+    mem[i] = 0x00;
+  }
 }
 
 
@@ -28,11 +33,12 @@ bool Interpreter::HandleFile( string path )
                    std::istreambuf_iterator<char>() );
 
   string stripped = Strip( content );
-  cout << stripped << "\n";
 
   Segment rootSegment;
   rootSegment.Init( stripped, false );
-  rootSegment.Print();
+
+  rootSegment.Print( 0 );
+  rootSegment.Run( &memPoint );
 
   return true;
 }

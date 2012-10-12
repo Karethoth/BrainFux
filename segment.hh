@@ -17,6 +17,7 @@ class Segment
   bool Construct( std::string data );
   size_t CalculateNextSegmentSize( std::string data );
   size_t FindLoopEnd( std::string data );
+  bool Exec( unsigned char **p );
 
  public:
   bool Init( std::string data, bool isLoop );
@@ -24,7 +25,9 @@ class Segment
   bool HasChildren();
   bool IsLoop();
 
-  void Print();
+  void Print( int ident );
+
+  bool Run( unsigned char **p );
 };
 
 #endif

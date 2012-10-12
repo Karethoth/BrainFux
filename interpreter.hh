@@ -4,10 +4,14 @@
 #include <iostream>
 #include "segment.hh"
 
+#define IPMEM 30000
 
 class Interpreter
 {
  private:
+  unsigned char mem[IPMEM];
+  unsigned char *memPoint;
+
  public:
   Interpreter();
   ~Interpreter();

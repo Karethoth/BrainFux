@@ -21,7 +21,9 @@ struct sCommand
   eCommandType type;
   unsigned int count;
 
+  sCommand();
   sCommand( char cmd );
+  void Set( char cmd );
 };
 
 #endif
