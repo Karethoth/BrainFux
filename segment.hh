@@ -11,6 +11,7 @@ static unsigned int NewSegmentId()
   return segmentIdCounter++;
 }
 
+
 class Segment
 {
  private:
@@ -39,6 +40,10 @@ class Segment
   void Print( int ident );
 
   bool Run( unsigned char **p );
+
+  std::vector<Segment*>* GetChildren();
+  std::vector<sCommand*>* GetCommands();
+  unsigned int GetId();
 };
 
 #endif

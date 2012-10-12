@@ -12,7 +12,6 @@ Segment::Segment( Segment *parent )
 {
   parent = parent;
   id = NewSegmentId();
-  cout << "id: " << id << "\n";
 }
 
 
@@ -154,6 +153,34 @@ void Segment::Print( int ident )
     cout << "]";
   }
   cout << "\n";
+}
+
+
+
+vector<Segment*>* Segment::GetChildren()
+{
+  return &children;
+}
+
+
+
+vector<sCommand*>* Segment::GetCommands()
+{
+  return &commands;
+}
+
+
+
+unsigned int Segment::GetId()
+{
+  return id;
+}
+
+
+
+bool Segment::IsLoop()
+{
+  return loop;
 }
 
 

@@ -1,4 +1,5 @@
 #include "interpreter.hh"
+#include "asOutput.hh"
 
 #include <string>
 #include <fstream>
@@ -37,7 +38,10 @@ bool Interpreter::HandleFile( string path )
   Segment rootSegment( NULL );
   rootSegment.Init( stripped, false );
 
-  rootSegment.Run( &memPoint );
+  AsOutputModule asOut;
+  asOut.Handle( &rootSegment );
+
+  //rootSegment.Run( &memPoint );
 
   return true;
 }
