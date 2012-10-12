@@ -41,7 +41,7 @@ bool Interpreter::HandleFile( string path )
   AsOutputModule asOut;
   asOut.Handle( &rootSegment );
 
-  //rootSegment.Run( &memPoint );
+  rootSegment.Run( &memPoint );
 
   return true;
 }
