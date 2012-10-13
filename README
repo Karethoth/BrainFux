@@ -1,0 +1,7 @@
+Brainfux - Brainfuck interpreter written in C++.
+
+It's a brainfuck interpreter that runs the input written in input file and creates GAS-compatible assembly code for it.
+
+Key-input(,) hasn't yet been implemented for the assembly output. It hasn't even been tested for the interpreter itself.
+
+Using code found from https://github.com/apankrat/bff/blob/master/samples/mandelbrot.b as test input.
