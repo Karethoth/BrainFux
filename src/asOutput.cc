@@ -38,12 +38,12 @@ bool AsOutputModule::CreateHeader()
 
 bool AsOutputModule::CreateFooter()
 {
-  string header =
+  string footer =
     "  movl $1, %eax\n"
     "  movl $0, %ebx\n"
     "  int  $0x80\n";
 
-  *out << header;
+  *out << footer;
 
   return true;
 }
@@ -56,10 +56,10 @@ bool AsOutputModule::HandleSegment( Segment *segment )
 
   if( segment->IsLoop() )
   {
-    *out << "  xorl %eax, %eax\n";
-    *out << "  movzbl  (%edx), %eax\n";
-    *out << "  test %eax, %eax\n";
-    *out << "  jz seg" << id << "end\n";
+    *out << "  xorl   %eax, %eax\n";
+    *out << "  movzbl (%edx), %eax\n";
+    *out << "  test   %eax, %eax\n";
+    *out << "  jz     seg" << id << "end\n";
     *out << "seg" << id << "start:\n";
   }
 
@@ -71,10 +71,10 @@ bool AsOutputModule::HandleSegment( Segment *segment )
 
   if( segment->IsLoop() )
   {
-    *out << "  xorl %eax, %eax\n";
-    *out << "  movzbl  (%edx), %eax\n";
-    *out << "  test %eax, %eax\n";
-    *out << "  jnz seg" << id << "start\n";
+    //*out << "  xorl   %eax, %eax\n";
+    *out << "  movzbl (%edx), %eax\n";
+    *out << "  test   %eax, %eax\n";
+    *out << "  jnz    seg" << id << "start\n";
     *out << "seg" << segment->GetId() << "end:\n";
   }
 
@@ -108,35 +108,35 @@ bool AsOutputModule::HandleCommands( Segment *segment )
     switch( (*it)->type )
     {
       case( ADD ):
-       *out << "  addl $" << (*it)->count << ", %edx\n";
+       *out << "  addl   $" << (*it)->count << ", %edx\n";
        break;
 
       case( SUB ):
-       *out << "  subl $" << (*it)->count << ", %edx\n";
+       *out << "  subl   $" << (*it)->count << ", %edx\n";
        break;
 
       case( INC ):
-       *out << "  xorl %eax, %eax\n";
-       *out << "  movzbl  (%edx), %eax\n";
-       *out << "  addl    $" << (*it)->count << ", %eax\n";
-       *out << "  movb    %al, (%edx)\n";
+       *out << "  xorl   %eax, %eax\n";
+       *out << "  movzbl (%edx), %eax\n";
+       *out << "  addl   $" << (*it)->count << ", %eax\n";
+       *out << "  movb   %al, (%edx)\n";
        break;
 
       case( DEC ):
-       *out << "  xorl %eax, %eax\n";
-       *out << "  movzbl  (%edx), %eax\n";
-       *out << "  subl    $" << (*it)->count << ", %eax\n";
-       *out << "  movb    %al, (%edx)\n";
+       *out << "  xorl   %eax, %eax\n";
+       *out << "  movzbl (%edx), %eax\n";
+       *out << "  subl   $" << (*it)->count << ", %eax\n";
+       *out << "  movb   %al, (%edx)\n";
        break;
 
       case( PRINT ):
-       *out << "  movl $4, %eax\n";
-       *out << "  movl $1, %ebx\n";
-       *out << "  movl %edx, %ecx\n";
-       *out << "  pushl %edx\n";
-       *out << "  movl $1, %edx\n";
-       *out << "  int  $0x80\n";
-       *out << "  popl %edx\n";
+       *out << "  movl   $4, %eax\n";
+       *out << "  movl   $1, %ebx\n";
+       *out << "  movl   %edx, %ecx\n";
+       *out << "  pushl  %edx\n";
+       *out << "  movl   $1, %edx\n";
+       *out << "  int    $0x80\n";
+       *out << "  popl   %edx\n";
        break;
     }
   }
