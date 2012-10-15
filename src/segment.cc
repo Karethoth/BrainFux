@@ -1,5 +1,7 @@
 #include "segment.hh"
 #include <cstdio>
+#include <iostream>
+#include <string>
 
 using std::cin;
 using std::cout;
@@ -48,7 +50,7 @@ bool Segment::Construct( string data )
       segmentSize = CalculateNextSegmentSize( dataLeft );
 
       if( segmentSize == dataLeft.length() &&
-          dataLeft    == data )
+          dataLeft == data )
       {
         sCommand cmd;
         sCommand tmp;
@@ -283,5 +285,7 @@ bool Segment::Exec( unsigned char **p )
       }
     }
   }
+
+  return true;
 }
 

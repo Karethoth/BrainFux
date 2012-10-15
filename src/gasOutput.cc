@@ -1,13 +1,16 @@
-#include "asOutput.hh"
+#include "gasOutput.hh"
+#include <string>
 #include <vector>
+#include <fstream>
 
+using std::cout;
 using std::string;
 using std::vector;
 
 
-bool AsOutputModule::Handle( Segment *rootSegment )
+bool GASOutputModule::Handle( Segment *rootSegment )
 {
-  out = new std::ofstream( "outp.asm" );
+  out = new std::ofstream( "gas.asm" );
 
   CreateHeader();
   HandleSegment( rootSegment );
@@ -20,7 +23,7 @@ bool AsOutputModule::Handle( Segment *rootSegment )
 
 
 
-bool AsOutputModule::CreateHeader()
+bool GASOutputModule::CreateHeader()
 {
   string header =
     "  .comm mem, 30000, 32\n"
@@ -36,7 +39,7 @@ bool AsOutputModule::CreateHeader()
 
 
 
-bool AsOutputModule::CreateFooter()
+bool GASOutputModule::CreateFooter()
 {
   string footer =
     "  movl $1, %eax\n"
@@ -50,7 +53,7 @@ bool AsOutputModule::CreateFooter()
 
 
 
-bool AsOutputModule::HandleSegment( Segment *segment )
+bool GASOutputModule::HandleSegment( Segment *segment )
 {
   unsigned int id = segment->GetId();
 
@@ -83,7 +86,7 @@ bool AsOutputModule::HandleSegment( Segment *segment )
 
 
 
-bool AsOutputModule::HandleChildren( Segment *segment )
+bool GASOutputModule::HandleChildren( Segment *segment )
 {
   vector<Segment*> *children = segment->GetChildren();
   vector<Segment*>::iterator it;
@@ -98,7 +101,7 @@ bool AsOutputModule::HandleChildren( Segment *segment )
 
 
 
-bool AsOutputModule::HandleCommands( Segment *segment )
+bool GASOutputModule::HandleCommands( Segment *segment )
 {
   vector<sCommand*> *commands = segment->GetCommands();
   vector<sCommand*>::iterator it;

@@ -1,5 +1,6 @@
 #include "interpreter.hh"
-#include "asOutput.hh"
+#include "gasOutput.hh"
+#include "nasmOutput.hh"
 
 #include <string>
 #include <fstream>
@@ -30,6 +31,11 @@ bool Interpreter::HandleFile( string path )
 {
   std::ifstream stream( path.c_str() );
 
+  if( !stream.is_open() )
+  {
+	  cout << "Couldn't open file '" << path << "'\n";
+  }
+
   string content( (std::istreambuf_iterator<char>( stream )),
                    std::istreambuf_iterator<char>() );
 
@@ -38,8 +44,11 @@ bool Interpreter::HandleFile( string path )
   Segment rootSegment( NULL );
   rootSegment.Init( stripped, false );
 
-  AsOutputModule asOut;
-  asOut.Handle( &rootSegment );
+  GASOutputModule gasOut;
+  gasOut.Handle( &rootSegment );
+
+  NASMOutputModule nasmOut;
+  nasmOut.Handle( &rootSegment );
 
   rootSegment.Run( &memPoint );
 
